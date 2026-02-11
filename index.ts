@@ -167,7 +167,12 @@ function configureExpoAndLanding(app: express.Application) {
     "templates",
     "landing-page.html",
   );
-  const landingPageTemplate = fs.readFileSync(templatePath, "utf-8");
+   const landingPageTemplate = fs.existsSync(templatePath)
+     ? fs.readFileSync(templatePath, "utf-8")
+     : [
+         "<!DOCTYPE html><html><head><title>APP_NAME_PLACEHOLDER</title><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/></head>",
+         "<body style=\"font-family:system-ui;margin:2rem;text-align:center;\"><h1>APP_NAME_PLACEHOLDER</h1><p>Landing page template not found. API is running.</p></body></html>",
+       ].join("");
   const appName = getAppName();
 
   log("Serving static Expo files with dynamic manifest routing");
